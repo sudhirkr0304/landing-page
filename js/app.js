@@ -77,18 +77,52 @@ createmeu("section4" , "#section4" , "section4menu");
 createmeu("section5" , "#section5" , "section5menu");
 
 
-document.getElementById("section1menu").style.color = "#FF0000";
 
 
-$(document).ready(function(){
-    $(window).scroll(function(){
-        var scroll = $(window).scrollTop();
-        if (scroll > 30) {
-            document.getElementById("section2menu").style.color = "#FF0000";
-        }
-  
-        else{
-            document.getElementById("section3menu").style.color = "#FF0000";
-        }
-    })
+const clr = document.getElementById("section1menu").style.color;
+
+window.addEventListener('scroll', event => {
+    //console.log(window.scrollY);
+    
+    if(window.scrollY > 3505)
+    {
+        document.getElementById("section5menu").style.color = "#FF0000";
+        document.getElementById("section1menu").style.color = clr;
+        document.getElementById("section2menu").style.color = clr;
+        document.getElementById("section3menu").style.color = clr;
+        document.getElementById("section4menu").style.color = clr;
+    }
+    else if(window.scrollY > 2747)
+    {
+        document.getElementById("section4menu").style.color = "#FF0000";
+        document.getElementById("section1menu").style.color = clr;
+        document.getElementById("section2menu").style.color = clr;
+        document.getElementById("section3menu").style.color = clr;
+        document.getElementById("section5menu").style.color = clr;   
+       
+    }
+    else if(window.scrollY > 1988)
+    {
+        document.getElementById("section3menu").style.color = "#FF0000";
+        document.getElementById("section1menu").style.color = clr;
+        document.getElementById("section2menu").style.color = clr;
+        document.getElementById("section4menu").style.color = clr;
+        document.getElementById("section5menu").style.color = clr;
+    }
+    else if(window.scrollY > 1230)
+    {
+        document.getElementById("section2menu").style.color = "#FF0000";
+        document.getElementById("section1menu").style.color = clr;
+        document.getElementById("section3menu").style.color = clr;
+        document.getElementById("section4menu").style.color = clr;
+        document.getElementById("section5menu").style.color = clr;
+    }
+    else
+    {
+        document.getElementById("section1menu").style.color = "#FF0000";
+        document.getElementById("section2menu").style.color = clr;
+        document.getElementById("section3menu").style.color = clr;
+        document.getElementById("section4menu").style.color = clr;
+        document.getElementById("section5menu").style.color = clr;
+    }
   })
