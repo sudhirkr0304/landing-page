@@ -1,3 +1,5 @@
+
+
 /**
  * 
  * Manipulating the DOM exercise.
@@ -55,3 +57,38 @@
 // Set sections as active
 
 
+// creating a navigation bar using function and then we will call this function
+function createmeu (text,link , id)
+{
+    var topnode = document.createElement("a");
+    var node = document.createElement("LI");
+    var txtnode = document.createTextNode(text);
+    node.appendChild(txtnode);
+    node.id = id;
+    topnode.appendChild(node);
+    topnode.href = link;
+    document.getElementById("navbar__list").appendChild(topnode);
+}
+
+createmeu("section1" , "#section1" , "section1menu");
+createmeu("section2" , "#section2" , "section2menu");
+createmeu("section3" , "#section3" , "section3menu");
+createmeu("section4" , "#section4" , "section4menu");
+createmeu("section5" , "#section5" , "section5menu");
+
+
+document.getElementById("section1menu").style.color = "#FF0000";
+
+
+$(document).ready(function(){
+    $(window).scroll(function(){
+        var scroll = $(window).scrollTop();
+        if (scroll > 30) {
+            document.getElementById("section2menu").style.color = "#FF0000";
+        }
+  
+        else{
+            document.getElementById("section3menu").style.color = "#FF0000";
+        }
+    })
+  })
