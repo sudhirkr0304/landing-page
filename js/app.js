@@ -1,128 +1,81 @@
+/*
+author : sudhir kumar
+date : 02/05/2020
 
-
-/**
- * 
- * Manipulating the DOM exercise.
- * Exercise programmatically builds navigation,
- * scrolls to anchors from navigation,
- * and highlights section in viewport upon scrolling.
- * 
- * Dependencies: None
- * 
- * JS Version: ES2015/ES6
- * 
- * JS Standard: ESlint
- * 
-*/
-
-/**
- * Define Global Variables
- * 
 */
 
 
-/**
- * End Global Variables
- * Start Helper Functions
- * 
-*/
-
-
+const sections = Array.from(document.getElementsByTagName('section'));
+const title = document.getElementById('title');
+const navbarList = document.getElementById('navbar__list');
 
 /**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
-
-// build the nav
-
-
-// Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
-
-
-/**
- * End Main Functions
- * Begin Events
- * 
-*/
-
-// Build menu 
-
-// Scroll to section on link click
-
-// Set sections as active
-
-
-// creating a navigation bar using function and then we will call this function
-function createmeu (text,link , id)
-{
-    var topnode = document.createElement("a");
-    var node = document.createElement("LI");
-    var txtnode = document.createTextNode(text);
-    node.appendChild(txtnode);
-    node.id = id;
-    topnode.appendChild(node);
-    topnode.href = link;
-    document.getElementById("navbar__list").appendChild(topnode);
+ * jQuery Scroll to element
+ * @param target: jQuery selector
+ */
+function scrollTo(target) {
+  $('html,body').animate({
+    scrollTop: target ? target.offset().top : 0
+  }, 'slow');
 }
 
-createmeu("section1" , "#section1" , "section1menu");
-createmeu("section2" , "#section2" , "section2menu");
-createmeu("section3" , "#section3" , "section3menu");
-createmeu("section4" , "#section4" , "section4menu");
-createmeu("section5" , "#section5" , "section5menu");
+/**
+ * Function called on each scroll event.
+ * It checks for the elements in viewport and sets active classes accordingly.
+ */
+function focusOnScroll() {
+  sections.forEach(section => section.classList.remove('section-active'));
+  if (isElementInViewport(title)) {
+    navbarList.childNodes[0].classList.add('navbar-active');
+    navbarList.childNodes.forEach((navLink, index) =>
+      index && navLink.classList.remove('navbar-active'));
+  } else {
+    const activeIndex = sections.findIndex(section => isElementInViewport(section.childNodes[1].childNodes[1]));
+    const activeSection = sections[activeIndex];
+    const activeLink = navbarList.childNodes[activeIndex + 1];
+    activeSection && activeSection.classList.add('section-active');
+    activeLink && activeLink.classList.add('navbar-active');
+    navbarList.childNodes.forEach((navLink, index) =>
+      index !== (activeIndex + 1) && navLink.classList.remove('navbar-active'));
+  }
+}
 
+window.onscroll = focusOnScroll;
 
+/**
+ * Checks if the element is inside the viewport.
+ *
+ * @param element: HTML element to check
+ * @returns {boolean}
+ */
+function isElementInViewport(element) {
+  const rect = element.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
 
+/**
+ * Populates the navbar list items with the section data.
+ */
+function renderNavbar() {
+  const homeLink = document.createElement('li');
+  homeLink.innerText = 'Home';
+  homeLink.className = 'menu__link';
+  homeLink.onclick = () => scrollTo();
+  navbarList.appendChild(homeLink);
+  sections.forEach(section => {
+    if (!section.dataset || !section.dataset.nav) return;
+    const item = document.createElement('li');
+    item.innerText = section.dataset.nav;
+    item.className = 'menu__link';
+    item.onclick = () => scrollTo($(`#${section.id}`));
+    navbarList.appendChild(item);
+  });
+}
 
-const clr = document.getElementById("section1menu").style.color;
-
-window.addEventListener('scroll', event => {
-    //console.log(window.scrollY);
-    
-    if(window.scrollY > 3505)
-    {
-        document.getElementById("section5menu").style.color = "#FF0000";
-        document.getElementById("section1menu").style.color = clr;
-        document.getElementById("section2menu").style.color = clr;
-        document.getElementById("section3menu").style.color = clr;
-        document.getElementById("section4menu").style.color = clr;
-    }
-    else if(window.scrollY > 2747)
-    {
-        document.getElementById("section4menu").style.color = "#FF0000";
-        document.getElementById("section1menu").style.color = clr;
-        document.getElementById("section2menu").style.color = clr;
-        document.getElementById("section3menu").style.color = clr;
-        document.getElementById("section5menu").style.color = clr;   
-       
-    }
-    else if(window.scrollY > 1988)
-    {
-        document.getElementById("section3menu").style.color = "#FF0000";
-        document.getElementById("section1menu").style.color = clr;
-        document.getElementById("section2menu").style.color = clr;
-        document.getElementById("section4menu").style.color = clr;
-        document.getElementById("section5menu").style.color = clr;
-    }
-    else if(window.scrollY > 1230)
-    {
-        document.getElementById("section2menu").style.color = "#FF0000";
-        document.getElementById("section1menu").style.color = clr;
-        document.getElementById("section3menu").style.color = clr;
-        document.getElementById("section4menu").style.color = clr;
-        document.getElementById("section5menu").style.color = clr;
-    }
-    else
-    {
-        document.getElementById("section1menu").style.color = "#FF0000";
-        document.getElementById("section2menu").style.color = clr;
-        document.getElementById("section3menu").style.color = clr;
-        document.getElementById("section4menu").style.color = clr;
-        document.getElementById("section5menu").style.color = clr;
-    }
-  })
+renderNavbar();
+focusOnScroll();
